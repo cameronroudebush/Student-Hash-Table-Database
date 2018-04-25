@@ -38,6 +38,7 @@ public:
 	/*Inserts a key value pair and keeps track of collisions. Returns if its sucessful or not.*/
 	bool insert(int key, T value, int& collisions) {
 		int spot = hash(key); //hashes the key for a spot on the array
+		int home = spot;
 		int inserted = 0, temp = 0;
 		if (itemCount == 1000) { //if its full we got a problem
 			return false;
@@ -54,7 +55,7 @@ public:
 				}
 				else { //random probing
 					collisions++; //increases collisions
-					spot = (spot + perm[temp]) % MAXHASH; //this uses the permutation array for the random probing and mods it to loop around
+					spot = (home + perm[temp]) % MAXHASH; //this uses the permutation array for the random probing and mods it to loop around
 					temp++; //Adds one to the slot of permutations incase we have to keep looking
 				}
 			}
@@ -65,6 +66,7 @@ public:
 	/*This removes something from the table with a given key. Returns if its sucessful or not.*/
 	bool remove(int key) {
 		int spot = hash(key); //Gets a spot from the hash of the key
+		int home = spot;
 		int removed = 0, temp = 0;
 		while (!removed) {
 			if (arr[spot].getKey() == key) { //If you found it then great job! Get rid of it!
@@ -80,7 +82,7 @@ public:
 				if (temp == 1000) { //If it loops around 1000 times and doesn't find it then it doesn't exist
 					return false;
 				}
-				spot = (spot + perm[temp]) % MAXHASH; //this uses the permutation array for the random probing and mods it to loop around
+				spot = (home + perm[temp]) % MAXHASH; //this uses the permutation array for the random probing and mods it to loop around
 				temp++; //Adds one to the slot of permutations incase we have to keep looking
 			}
 		}
@@ -90,6 +92,7 @@ public:
 	/*Locates the given key and sets it equal to a value to be able to return it. Returns if its sucessful or not.*/
 	bool find(int key, T& value) {
 		int spot = hash(key); //Gets a spot from the hash of the key
+		int home = spot;
 		int found = 0, temp = 0;
 		while (!found) {
 			if (arr[spot].getKey() == key) { //If the key is found then we are good and set it equal to the value
@@ -103,7 +106,7 @@ public:
 				if (temp == 1000) { //If we have itterated 1000 times then its not there
 					return false;
 				}
-				spot = (spot + perm[temp]) % MAXHASH; //this uses the permutation array for the random probing and mods it to loop around
+				spot = (home + perm[temp]) % MAXHASH; //this uses the permutation array for the random probing and mods it to loop around
 				temp++; //Adds one to the slot of permutations incase we have to keep looking
 			}
 		}
